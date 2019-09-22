@@ -2,7 +2,11 @@
 from offer import Offer
 from NikeScrapper import NikeScrapper
 from AdidasScrapper import AdidasScrapper
-import sqlite3
+from AboutYou_scrapper import AboutYou_scrapper
+
+import time
+
+TeleBot_ID = 390569459
 
 class UpdateSteals:
     def __init__(self, db_connection):
@@ -11,8 +15,8 @@ class UpdateSteals:
         self._new_steals = []
         self._removed_steals = []
 
-    def find_steals(self):
-
+    def find_steals(self, bot):
+        status = True
         self._db_connection_cursor.execute("SELECT * FROM offers")
         raw_db_steals = self._db_connection_cursor.fetchall()
         db_steals = []
@@ -23,9 +27,16 @@ class UpdateSteals:
             # print(db_steal.print_offer())
             db_steals.append(db_steal)
 
+        # aboutyou_scrapper = AboutYou_scrapper()
+        # aboutyou_scrapper.find_steals()
         nikeScrapper = NikeScrapper()
         # adidasScrapper = AdidasScrapper()
-        shop_steals = nikeScrapper.find_steals()
+        try:
+            shop_steals = nikeScrapper.find_steals()
+        except:
+            bot.sendMessage(TeleBot_ID, "Problem with connecting to Nike.com, cooldown for 5 minuites")
+            time.sleep(300)
+            return False
         # shop_steals = adidasScrapper.find_steals()
 
         exists = 0
@@ -52,6 +63,7 @@ class UpdateSteals:
                 self._db_connection_cursor.execute("DELETE FROM offers WHERE title=? AND color=?", (db_steal._title, db_steal._color))
             exists = 0
         self._db_connection.commit()
+        return status
 
     def get_db_steals(self):
         return self._db_connection_cursor.fetchall(self._db_connection_cursor.execute("SELECT * FROM offers"))

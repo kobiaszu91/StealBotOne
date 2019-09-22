@@ -20,33 +20,35 @@ class NikeScrapper:
                     for item in property['items']:
                         if item['inWallContentCard']:
                             continue
+                        try:
+                            if item['numberOfColors'] > 1:
+                                for color in item['colorways']:
+                                    if color['overriddenLocalPrice']:
+                                        title = str(item['title'])
+                                        title = title.replace("'", "")
+                                        title = title.replace(" ", "_")
+                                        new_price = int(str(color['localPrice']).split()[0])
+                                        old_price = int(str(color['overriddenLocalPrice']).split()[0])
+                                        url = str(color['pdpUrl'])
+                                        url_image = str(color['imageUrl'])
+                                        item_color = str(color['colorDescription'])
+                                        offer = Offer(title, url, url_image, new_price, old_price, item_color)
+                                        found_steals.append(offer)
+                                        # offer.print_offer()
+                            elif color['overriddenLocalPrice']:
+                                title = str(item['title'])
+                                title = title.replace("'", "")
+                                title = title.replace(" ", "_")
+                                old_price = int(str(color['localPrice']).split()[0])
 
-                        if item['numberOfColors'] > 1:
-                            for color in item['colorways']:
-                                if color['overriddenLocalPrice']:
-                                    title = str(item['title'])
-                                    title = title.replace("'", "")
-                                    title = title.replace(" ", "_")
-                                    old_price = int(str(color['localPrice']).split()[0])
-                                    new_price = int(str(color['overriddenLocalPrice']).split()[0])
-                                    url = str(color['pdpUrl'])
-                                    url_image = str(color['imageUrl'])
-                                    item_color = str(color['colorDescription'])
-                                    offer = Offer(title, url, url_image, new_price, old_price, item_color)
-                                    found_steals.append(offer)
-                                    # offer.print_offer()
-                        elif color['overriddenLocalPrice']:
-                            title = str(item['title'])
-                            title = title.replace("'", "")
-                            title = title.replace(" ", "_")
-                            old_price = int(str(color['localPrice']).split()[0])
-
-                            new_price = int(str(color['overriddenLocalPrice']).split()[0])
-                            url = str(item['pdpUrl'])
-                            url_image = str(item['spriteSheet'])
-                            offer = Offer(title, url, url_image, new_price, old_price, item_color)
-                            found_steals.append(offer)
-                            # offer.print_offer()
+                                new_price = int(str(color['overriddenLocalPrice']).split()[0])
+                                url = str(item['pdpUrl'])
+                                url_image = str(item['spriteSheet'])
+                                offer = Offer(title, url, url_image, new_price, old_price, item_color)
+                                found_steals.append(offer)
+                                # offer.print_offer()
+                        except:
+                            continue
 
                 products_json = json.loads(requests.get(products_url + "=" + str(page)).content)
                 page += 1

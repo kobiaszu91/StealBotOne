@@ -5,7 +5,7 @@ import time
 
 conn = sqlite3.connect('offer.db')
 c = conn.cursor()
-#fff
+
 
 # c.execute("""CREATE TABLE offers (
 #          title text,
@@ -25,6 +25,7 @@ bot.setWebhook()
 
 
 def handle(msg):
+    """my docstring"""
     chat_id = msg['chat']['id']
     command = msg['text']
     print('Got command: %s' + command)
@@ -33,10 +34,11 @@ def handle(msg):
 
 def main():
     updateSteals = UpdateSteals(conn)
-    bot.sendMessage(TeleBot_ID , "StealBot active!")
+    bot.sendMessage(TeleBot_ID, "StealBot active!")
 
     while 1:
-        updateSteals.find_steals()
+        if not updateSteals.find_steals(bot):
+            continue
         print("NEW AVAILABLE STEALS: ")
         updateSteals.print_new_steals()
         for new_steal in updateSteals.get_new_steals():
@@ -50,17 +52,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
