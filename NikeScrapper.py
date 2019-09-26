@@ -2,12 +2,13 @@ import requests
 import json
 from offer import Offer
 
+
 class NikeScrapper:
     def __init__(self):
         self._mens_shoes = 'https://store.nike.com/html-services/gridwallData?country=PL&lang_locale=pl_PL&gridwallPath=mczyni-buty/7puZoi3&pn'
         self._mens_cloths = 'https://store.nike.com/html-services/gridwallData?country=PL&lang_locale=pl_PL&gridwallPath=mczyni-odzie/1mdZ7pu&pn'
 
-    def find_steals(self):
+    def find_steals(self, bot):
         shop_urls = [self._mens_shoes, self._mens_cloths]
         found_steals = []
 
