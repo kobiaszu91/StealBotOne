@@ -50,15 +50,16 @@ def main():
             bot.sendMessage(TeleBot_ID,"StealBot: SCANNING!")
             if not updateSteals.find_steals(bot):
                 continue
-            bot.sendMessage(TeleBot_ID, "StealBot: SCAN FINNISHED!")
-            bot.sendMessage(TeleBot_ID, "StealBot: NEW AVAILABLE STEALS:")
-            updateSteals.print_new_steals()
-            for new_steal in updateSteals.get_new_steals():
-                bot.sendMessage(TeleBot_ID, new_steal.get_bot_message())
+            bot.sendMessage(TeleBot_ID, "StealBot: SCAN FINNISHED!") 
             bot.sendMessage(TeleBot_ID, "StealBot: REMOVED STEALS STEALS:")
             updateSteals.print_removed_steals()
             for removed_steal in updateSteals.get_removed_steals():
                 bot.sendMessage(TeleBot_ID, removed_steal.get_bot_message())
+            bot.sendMessage(TeleBot_ID, "StealBot: NEW AVAILABLE STEALS:")
+            updateSteals.print_new_steals()
+            for new_steal in updateSteals.get_new_steals():
+                bot.sendMessage(TeleBot_ID, new_steal.get_bot_message())
+  
             for i in range(300):
                 i += 1
                 time.sleep(1)
