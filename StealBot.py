@@ -60,8 +60,9 @@ def main():
             for removed_steal in updateSteals.get_removed_steals():
                 bot.sendMessage(TeleBot_ID, removed_steal.get_bot_message())
             for i in range(300):
+                i += 1
                 time.sleep(1)
-                if bot_status == Steal_Status.RUNNING:
+                if bot_status == Steal_Status.STOPPED:
                     break
         else:
             bot.sendMessage(TeleBot_ID, "StealBot: paused!")
